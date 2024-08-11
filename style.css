@@ -16,8 +16,8 @@ body {
 	width: 100%;
 	height: 80px;
 	border: none;
-	background-color: #fff; // bijna zwart
-	color: #252525; // wit
+	background-color: #252525; // wit
+	color: #fff; // bijna zwart
 	font-size: 2.2em;
 	text-align: right;
 	padding: 10px;

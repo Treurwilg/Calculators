@@ -11,7 +11,7 @@ function inputDigit(digit) {
 		calculator.displayValue = digit;
 		waitingForSecondOperand = false;	
 	} else {
-		calculator.displayValue = displayValue === '0' ? digit : displayValue;	
+		calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;	
 	}
 }
 
