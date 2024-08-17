@@ -1,5 +1,6 @@
-const calculator = {
-	displayValue: '0',
+// Everything to construct a valid expression
+const calculator = { 
+	displayValue: '0', // input of user or result of an operation
 	firstOperand: null,
 	waitingForSecondOperand: false,
 	operator: null
@@ -9,14 +10,19 @@ function inputDigit(digit) {
 	const { displayValue, waitingForSecondOperand } = calculator;
 	if (waitingForSecondOperand === true) {
 		calculator.displayValue = digit;
-		waitingForSecondOperand = false;	
+		calculator.waitingForSecondOperand = false;
 	} else {
-		calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;	
-	}
+		calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
+	}	
+	console.log(calculator);
 }
 
 function inputDecimal(dot) {
-	if (calculator.waitingForSecondOperand === true) return;
+	if (calculator.waitingForSecondOperand === true) {
+		calculator.displayValue = '0.';
+		calculator.waitingForSecondOperand = false;
+		return;	
+	}
 
 	if (!calculator.displayValue.includes(dot)) {
 		calculator.displayValue += dot;
@@ -28,33 +34,44 @@ function handleOperator(nextOperator) {
 	const inputValue = parseFloat(displayValue);
 	if (operator && calculator.waitingForSecondOperand) {
 		calculator.operator = nextOperator;
+		console.log(calculator);
 		return;		
 	}
+	
 	if (firstOperand == null && !isNaN(inputValue)) {
 		calculator.firstOperand = inputValue;	
-	} else if (operator) {
-		const result = performCalculation[operator](firstOperand, inputValue);
+	}else if (operator) {
+		const result = calculate(firstOperand, inputValue, operator); 
 		calculator.displayValue = String(result);
 		calculator.firstOperand = result;	
-	}
+	} 
+	
 	calculator.waitingForSecondOperand = true;
 	calculator.operator = nextOperator;
+	console.log(calculator);
 }
 
-const performCalculation = {
-	'/': (firstOperand, secondOperand) => firstOperand / secondOperand,
-	'*': (firstOperand, secondOperand) => firstOperand * secondOperand,
-	'+': (firstOperand, secondOperand) => firstOperand + secondOperand,
-	'-': (firstOperand, secondOperand) => firstOperand - secondOperand,
-	'=': (firstOperand, secondOperand) => secondOperand
-};
+function calculate(firstOperand, secondOperand, operator) {
+	if (operator === '+') {
+		return firstOperand + secondOperand;	
+	} else if (operator === '-') {
+		return firstOperand - secondOperand;
+	} else if (operator === '*') {
+		return firstOperand * secondOperand;
+	} else if (operator === '/') {
+		return firstOperand / secondOperand;	
+	}
+	return secondOperand;
+}
 
 function resetCalculator() {
 	calculator.displayValue = '0';
 	calculator.firstOperand = null;
 	calculator.waitingForSecondOperand = false;
 	calculator.operator = null;
+	console.log(calculator);
 }
+
 
 function updateDisplay() {
 	const display = document.querySelector('.calculator-screen');
@@ -64,7 +81,7 @@ function updateDisplay() {
 updateDisplay();
 
 const keys = document.querySelector('.calculator-keys');
-keys.addEventListener('click', (event) => {
+	keys.addEventListener('click', (event) => {
 	const { target } = event;
 	if (!target.matches('button')) {
 		return;
